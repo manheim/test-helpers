@@ -1,7 +1,9 @@
 module TestHelpers
   module Wait
-    def poll_and_assert(timeout = TestHelpers.configuration.wait_timeout, interval = TestHelpers.configuration.wait_interval)
+    def poll_and_assert(options = {})
       return unless block_given?
+      timeout = Integer(options[:timeout]) || TestHelpers.configuration.wait_timeout
+      interval = Integer(options[:interval]) || TestHelpers.configuration.wait_interval
       end_time = ::Time.now + timeout
       until ::Time.now > end_time
         begin
@@ -14,8 +16,11 @@ module TestHelpers
       yield
     end
 
-    def wait_until(timeout = TestHelpers.configuration.wait_timeout, interval = TestHelpers.configuration.wait_interval)
+    def wait_until(options = {})
       return unless block_given?
+      timeout = Integer(options[:timeout]) || TestHelpers.configuration.wait_timeout
+      interval = Integer(options[:interval]) || TestHelpers.configuration.wait_interval
+      error = options[:error] || TimeoutError.new('Timed out waiting for block')
       end_time = ::Time.now + timeout
       until ::Time.now > end_time
         begin
@@ -27,7 +32,8 @@ module TestHelpers
       end
       result = yield
       return result if result
-      raise TimeoutError.new('Timed out waiting for block')
+      raise error
     end
+
   end
 end
