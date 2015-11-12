@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'test-helpers'
-  s.version = '0.0.6'
+  s.version = '0.1.0'
   s.date = '2015-08-25'
   s.summary = "Test helpers!"
   s.description = "A collection of helpers."
