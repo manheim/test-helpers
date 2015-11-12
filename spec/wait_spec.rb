@@ -49,7 +49,7 @@ describe TestHelpers::Wait do
       it 'should not raise an error until the specified timeout has elapsed' do
         start_time = Time.now
         begin
-          dummy_class.poll_and_assert(3) { expect(true).to be false }
+          dummy_class.poll_and_assert(timeout: 3) { expect(true).to be false }
         rescue Exception
           end_time = Time.now
         end
@@ -57,7 +57,7 @@ describe TestHelpers::Wait do
       end
 
       it 'yields to the block multiple times' do
-        expect { |probe| dummy_class.poll_and_assert(1, &probe) }.to yield_control.at_least(:twice)
+        expect { |probe| dummy_class.poll_and_assert(timeout: 1, &probe) }.to yield_control.at_least(:twice)
       end
     end
   end
@@ -101,13 +101,13 @@ describe TestHelpers::Wait do
 
       it 'should not raise an error until the specified timeout has elapsed' do
         start_time = Time.now
-        expect { dummy_class.wait_until(3) { true == false } }.to raise_error(TimeoutError)
+        expect { dummy_class.wait_until(timeout: 3) { true == false } }.to raise_error(TimeoutError)
         end_time = Time.now
         expect(end_time - start_time).to be >= 3
       end
 
       it 'yields to the block multiple times' do
-        expect { |probe| dummy_class.wait_until(1, &probe) }.to yield_control.at_least(:twice).and raise_error(TimeoutError)
+        expect { |probe| dummy_class.wait_until(timeout: 1, &probe) }.to yield_control.at_least(:twice).and raise_error(TimeoutError)
       end
     end
   end

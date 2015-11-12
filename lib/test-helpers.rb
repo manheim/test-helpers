@@ -18,7 +18,7 @@ module TestHelpers
     attr_accessor :wait_timeout, :wait_interval
 
     def initialize
-      @wait_timeout = 5
+      @wait_timeout = 5.0
       @wait_interval = 0.1
     end
   end
