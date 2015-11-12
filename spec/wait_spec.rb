@@ -131,6 +131,14 @@ describe TestHelpers::Wait do
         allow(dummy_class).to receive(:raise).and_return(false)
         dummy_class.poll_and_assert { expect(true).to be false }
       end
+
+      context 'when a custom error is passed in' do
+        let(:error) { ArgumentError.new('blah') }
+        it 'should eventually raise the given error' do
+          statement = -> { dummy_class.wait_until(error: error) { true == false } }
+          expect { statement.call }.to raise_error(error)
+        end
+      end
     end
   end
 
