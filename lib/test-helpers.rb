@@ -19,7 +19,7 @@ module TestHelpers
 
     def initialize
       @wait_timeout = 5
-      @wait_interval = .1
+      @wait_interval = 0.1
     end
   end
 
