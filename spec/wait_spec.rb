@@ -94,6 +94,11 @@ describe TestHelpers::Wait do
         allow(dummy_class).to receive(:wait_until) { |&block| block.call(true == true) }
         expect { |probe| dummy_class.wait_until(&probe) }.to yield_control.exactly(:once)
       end
+
+      it 'should not sleep' do
+        expect(dummy_class).to_not receive(:sleep)
+        dummy_class.wait_until { expect(true).to be true }
+      end
     end
 
     context 'for a failing test' do
@@ -119,6 +124,12 @@ describe TestHelpers::Wait do
 
       it 'yields to the block multiple times' do
         expect { |probe| dummy_class.wait_until(timeout: 1, &probe) }.to yield_control.at_least(:twice).and raise_error(TimeoutError)
+      end
+
+      it 'should sleep for interval duration' do
+        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers.configuration.wait_interval)
+        allow(dummy_class).to receive(:raise).and_return(false)
+        dummy_class.poll_and_assert { expect(true).to be false }
       end
     end
   end
