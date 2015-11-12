@@ -3,7 +3,10 @@ require 'spec_helper'
 describe TestHelpers::Wait do
 
   before :all do
-    TestHelpers.configuration.wait_timeout = 1
+    TestHelpers.configuration do |config|
+      config.wait_timeout = 1
+      config.wait_interval = 0.5
+    end
   end
 
   describe '.poll_and_assert' do
@@ -26,6 +29,11 @@ describe TestHelpers::Wait do
       it 'yields to the block once' do
         allow(dummy_class).to receive(:poll_and_assert) { |&block| block.call(expect(true).to be(true)) }
         expect { |probe| dummy_class.poll_and_assert(&probe) }.to yield_control.exactly(:once)
+      end
+
+      it 'should not sleep' do
+        expect(dummy_class).to_not receive(:sleep)
+        dummy_class.poll_and_assert { expect(true).to be true }
       end
     end
 
@@ -56,9 +64,12 @@ describe TestHelpers::Wait do
         expect(end_time - start_time).to be >= 3
       end
 
-      it 'yields to the block multiple times' do
-        expect { |probe| dummy_class.poll_and_assert(timeout: 1, &probe) }.to yield_control.at_least(:twice)
+      it 'should sleep for interval duration' do
+        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers.configuration.wait_interval)
+        allow(dummy_class).to receive(:raise).and_return(false)
+        dummy_class.poll_and_assert { expect(true).to be false }
       end
+
     end
   end
 

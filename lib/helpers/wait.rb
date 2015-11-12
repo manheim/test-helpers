@@ -5,15 +5,17 @@ module TestHelpers
       timeout = Float(options[:timeout] || TestHelpers.configuration.wait_timeout)
       interval = Float(options[:interval] || TestHelpers.configuration.wait_interval)
       end_time = ::Time.now + timeout
+      failure = nil
       until ::Time.now > end_time
         begin
           result = yield
           return result if result
-        rescue ::RSpec::Expectations::ExpectationNotMetError
+        rescue ::RSpec::Expectations::ExpectationNotMetError => e
+          failure = e
           sleep interval
         end
       end
-      yield
+      raise failure
     end
 
     def wait_until(options = {})
