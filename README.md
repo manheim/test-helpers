@@ -6,6 +6,13 @@ A collection of helper methods, matchers, and other various other freebies that 
 #### Usage
 
 Get the gem:
+
+```ruby
+gem install test-helpers
+```
+
+or add to your ```Gemfile```
+
 ```ruby
 gem 'test-helpers'
 ```
