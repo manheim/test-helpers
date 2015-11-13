@@ -22,7 +22,7 @@ module TestHelpers
       return unless block_given?
       timeout = Float(options[:timeout] || TestHelpers.configuration.wait_timeout)
       interval = Float(options[:interval] || TestHelpers.configuration.wait_interval)
-      error = options[:error] || TimeoutError.new('Timed out waiting for block')
+      error = options[:error] || TestHelpers.configuration.default_error
       end_time = ::Time.now + timeout
       until ::Time.now > end_time
         begin
