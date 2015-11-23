@@ -42,6 +42,15 @@ TestHelpers::Wait.configuration do |config|
 end
 ```
 
+If you don't set your own defaults the following defaults will apply:
+```ruby
+TestHelpers::Wait.configuration do |config|
+  config.wait_timeout = 5.0
+  config.wait_interval = 0.1
+  config.default_error = TimeoutError.new('Timed out waiting for block')
+end
+```
+
 (optional) Include it in Cucumber's ```World``` object:
 ```ruby
 #features\support\env.rb
