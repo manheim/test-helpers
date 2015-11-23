@@ -17,7 +17,7 @@ or add to your ```Gemfile```
 gem 'test-helpers'
 ```
 
-Require parts of the gem the gem that you want to use (or require everything):
+Require parts of the gem that you want to use (or require everything):
 ```ruby
 require 'test-helpers/wait'
 ```
@@ -54,11 +54,15 @@ poll_and_assert { expect(true).to be false } #will poll the assert until true or
 ```
 
 ```ruby
-poll_and_assert(30) { expect(true).to be false } #will poll the assert until true or specified timeout
+poll_and_assert(timeout: 30) { expect(true).to be false } #will poll the assert until true or specified timeout
 ```
 
 ```ruby
-wait_until { true == false }
+poll_and_assert(interval: 0.5) { expect(true).to be false } #will poll the assert until true or specified timeout every 0.5 seconds
+```
+
+```ruby
+wait_until(error: ArgumentError.new('blah')) { true == false } #raise the given error when the block times out
 ```
 
 #### Why?
