@@ -4,7 +4,7 @@ require 'test-helpers/wait'
 describe TestHelpers::Wait do
 
   before :all do
-    TestHelpers.configuration do |config|
+    TestHelpers::Wait.configuration do |config|
       config.wait_timeout = 1
       config.wait_interval = 0.5
     end
@@ -51,8 +51,8 @@ describe TestHelpers::Wait do
         rescue Exception
           end_time = Time.now
         end
-        expect(end_time - start_time).to be >= TestHelpers.configuration.wait_timeout
-        expect(end_time - start_time).to be < TestHelpers.configuration.wait_timeout + 1
+        expect(end_time - start_time).to be >= TestHelpers::Wait.configuration.wait_timeout
+        expect(end_time - start_time).to be < TestHelpers::Wait.configuration.wait_timeout + 1
       end
 
       it 'should not raise an error until the specified timeout has elapsed' do
@@ -66,7 +66,7 @@ describe TestHelpers::Wait do
       end
 
       it 'should sleep for interval duration' do
-        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers.configuration.wait_interval)
+        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers::Wait.configuration.wait_interval)
         allow(dummy_class).to receive(:raise).and_return(false)
         dummy_class.poll_and_assert { expect(true).to be false }
       end
@@ -112,8 +112,8 @@ describe TestHelpers::Wait do
         start_time = Time.now
         expect { dummy_class.wait_until { true == false } }.to raise_error(TimeoutError)
         end_time = Time.now
-        expect(end_time - start_time).to be >= TestHelpers.configuration.wait_timeout
-        expect(end_time - start_time).to be < TestHelpers.configuration.wait_timeout + 1
+        expect(end_time - start_time).to be >= TestHelpers::Wait.configuration.wait_timeout
+        expect(end_time - start_time).to be < TestHelpers::Wait.configuration.wait_timeout + 1
       end
 
       it 'should not raise an error until the specified timeout has elapsed' do
@@ -128,7 +128,7 @@ describe TestHelpers::Wait do
       end
 
       it 'should sleep for interval duration' do
-        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers.configuration.wait_interval)
+        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers::Wait.configuration.wait_interval)
         allow(dummy_class).to receive(:raise).and_return(false)
         dummy_class.poll_and_assert { expect(true).to be false }
       end

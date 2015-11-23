@@ -35,7 +35,7 @@ There are multiple default configuration options that you can set.
 # features\support\env.rb
 # or
 # spec_helper.rb
-TestHelpers.configuration do |config
+TestHelpers::Wait.configuration do |config|
   config.wait_timeout = 30 #timeout after 30 seconds
   config.wait_interval = 0.5 #poll the given block every 0.5 seconds
   config.default_error = ArgumentError.new('It brokez') #raise this error every time a block times out
