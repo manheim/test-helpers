@@ -3,7 +3,6 @@ Bundler.setup
 
 require 'pry'
 require 'rspec'
-require 'test-helpers'
 
 RSpec.configure do |config|
   config.color = true

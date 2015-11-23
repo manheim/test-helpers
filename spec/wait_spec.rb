@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'test-helpers/wait'
 
 describe TestHelpers::Wait do
 

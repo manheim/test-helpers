@@ -1,6 +1,4 @@
-project_root = File.expand_path(File.dirname(__FILE__))
-Dir.glob(project_root + '/helpers/*.rb').each { |file| require file }
-
+$LOAD_PATH << File.dirname(__FILE__)
 module TestHelpers
   class << self
     attr_accessor :configuration
