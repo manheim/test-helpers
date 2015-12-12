@@ -1,7 +1,7 @@
 test-helpers
 ---------------
 
-A collection of helper methods, matchers, and other various other freebies that we all use across multiple projects.  To see what is included in this package, navigate to the [Documentation](#docs) (coming soon).
+A collection of helper methods, matchers, and other various other freebies that we all use across multiple projects.
 
 #### Usage
 
@@ -27,6 +27,34 @@ require 'test-helpers/all'
 ```
 
 ### TestHelpers::Wait
+The wait module contains two methods:  ```poll_and_assert``` and ```wait_until```.  
+
+##### poll_and_assert
+is useful when you are asserting on something that has a timing componenet.  For example, you need to assert on an asynchronous response to an API request but the response isn't immediately available.  In these types of situation, use the ```poll_and_assert``` method and pass in your expectation.  The method will poll the assertion until it returns true or it times out.  If it times out, you will get the actual assertion message back instead of a generic timeout message.
+
+```ruby
+#will poll the assert until true or default timeout
+poll_and_assert { expect(true).to be false } 
+```
+
+```ruby
+#will poll the assert until true or specified
+poll_and_assert(timeout: 30) { expect(true).to be false }  timeout
+```
+
+##### wait_until
+is useful when you want to wait until something happens before continuing.  This method will trap all ```StandardError```s until the block returns true or it times out.  If it times out, you will get the default timeout error message or you can pass in a custom error message for better reporting.
+
+```ruby
+#will poll the assert until true or specified timeout every 0.5 seconds
+poll_and_assert(interval: 0.5) { expect(true).to be false } 
+```
+
+```ruby
+#raise a TimeoutError with the given error message.
+wait_until(error_message:  'True never equaled false' ) { true == false } 
+```
+
 ##### Configuration
 
 There are multiple default configuration options that you can set.
@@ -38,7 +66,7 @@ There are multiple default configuration options that you can set.
 TestHelpers::Wait.configuration do |config|
   config.wait_timeout = 30 #timeout after 30 seconds
   config.wait_interval = 0.5 #poll the given block every 0.5 seconds
-  config.default_error = ArgumentError.new('It brokez') #raise this error every time a block times out
+  config.error_message = 'My default error message'
 end
 ```
 
@@ -47,7 +75,7 @@ If you don't set your own defaults the following defaults will apply:
 TestHelpers::Wait.configuration do |config|
   config.wait_timeout = 5.0
   config.wait_interval = 0.1
-  config.default_error = TimeoutError.new('Timed out waiting for block')
+  config.error_message = 'Timed out waiting for block'
 end
 ```
 
@@ -56,27 +84,6 @@ end
 #features\support\env.rb
 World(TestHelpers::Wait)
 ```
-
-Use it!
-```ruby
-poll_and_assert { expect(true).to be false } #will poll the assert until true or default timeout
-```
-
-```ruby
-poll_and_assert(timeout: 30) { expect(true).to be false } #will poll the assert until true or specified timeout
-```
-
-```ruby
-poll_and_assert(interval: 0.5) { expect(true).to be false } #will poll the assert until true or specified timeout every 0.5 seconds
-```
-
-```ruby
-wait_until(error: ArgumentError.new('blah')) { true == false } #raise the given error when the block times out
-```
-
-#### Why?
-
-I've seen a lot of duplicate code across various projects that I've been on.  This is a way to consolidate and have a single point of failure.  Also sharing is caring.
 
 Contribute
 --------------
