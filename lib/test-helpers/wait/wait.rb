@@ -13,12 +13,12 @@ module TestHelpers
     end
 
     class Configuration
-      attr_accessor :wait_timeout, :wait_interval, :default_error
+      attr_accessor :wait_timeout, :wait_interval, :error_message
 
       def initialize
         @wait_timeout = 5.0
         @wait_interval = 0.1
-        @default_error = TimeoutError.new('Timed out waiting for block')
+        @error_message = 'Timed out waiting for block'
       end
     end
 
@@ -44,7 +44,7 @@ module TestHelpers
       return unless block_given?
       timeout = Float(options[:timeout] || TestHelpers::Wait.configuration.wait_timeout)
       interval = Float(options[:interval] || TestHelpers::Wait.configuration.wait_interval)
-      error = options[:error] || TestHelpers::Wait.configuration.default_error
+      error_message = options[:error_message] || TestHelpers::Wait.configuration.error_message
       end_time = ::Time.now + timeout
       until ::Time.now > end_time
         begin
@@ -56,7 +56,7 @@ module TestHelpers
       end
       result = yield
       return result if result
-      raise error
+      raise TimeoutError.new(error_message)
     end
 
   end
