@@ -44,7 +44,7 @@ module TestHelpers
       return unless block_given?
       timeout = Float(options[:timeout] || TestHelpers::Wait.configuration.wait_timeout)
       interval = Float(options[:interval] || TestHelpers::Wait.configuration.wait_interval)
-      error_message = options[:error_message] || TestHelpers::Wait.configuration.default_error
+      error_message = options[:error_message] || TestHelpers::Wait.configuration.error_message
       end_time = ::Time.now + timeout
       until ::Time.now > end_time
         begin
