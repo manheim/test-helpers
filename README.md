@@ -1,5 +1,6 @@
 test-helpers
 ---------------
+[![Build Status](https://travis-ci.org/manheim/test-helpers.svg?branch=master)](https://travis-ci.org/manheim/test-helpers)
 
 A collection of helper methods, matchers, and other various other freebies that we all use across multiple projects.
 
