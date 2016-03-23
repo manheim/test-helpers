@@ -3,9 +3,6 @@ before_install:
   - "gem --version"
   - "gem install bundler"
   - "bundler --version"
-gemfile: 
-  - Gemfile
-  - Gemfile.jruby
 language: ruby
 rvm: 
   - "1.9.3"
