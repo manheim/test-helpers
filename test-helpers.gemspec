@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.3.0'
   s.name = 'test-helpers'
-  s.version = '2.0'
+  s.version = '2.0.0'
   s.date = '2015-08-25'
   s.summary = "Test helpers!"
   s.description = "A collection of helpers."
