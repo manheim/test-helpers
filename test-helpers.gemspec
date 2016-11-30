@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.3.0'
   s.name = 'test-helpers'
   s.version = '2.0'
   s.date = '2015-08-25'
