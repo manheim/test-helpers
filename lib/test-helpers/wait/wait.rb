@@ -56,7 +56,7 @@ module TestHelpers
       end
       result = yield
       return result if result
-      raise TimeoutError.new(error_message)
+      raise Timeout::Error.new(error_message)
     end
 
   end

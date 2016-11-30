@@ -105,12 +105,12 @@ describe TestHelpers::Wait do
     context 'for a failing test' do
       it 'should eventually raise an error' do
         statement = -> { dummy_class.wait_until { true == false } }
-        expect { statement.call }.to raise_error(TimeoutError)
+        expect { statement.call }.to raise_error(Timeout::Error)
       end
 
       it 'should not raise an error until the default timeout has elapsed' do
         start_time = Time.now
-        expect { dummy_class.wait_until { true == false } }.to raise_error(TimeoutError)
+        expect { dummy_class.wait_until { true == false } }.to raise_error(Timeout::Error)
         end_time = Time.now
         expect(end_time - start_time).to be >= TestHelpers::Wait.configuration.wait_timeout
         expect(end_time - start_time).to be < TestHelpers::Wait.configuration.wait_timeout + 1
@@ -118,13 +118,13 @@ describe TestHelpers::Wait do
 
       it 'should not raise an error until the specified timeout has elapsed' do
         start_time = Time.now
-        expect { dummy_class.wait_until(timeout: 3) { true == false } }.to raise_error(TimeoutError)
+        expect { dummy_class.wait_until(timeout: 3) { true == false } }.to raise_error(Timeout::Error)
         end_time = Time.now
         expect(end_time - start_time).to be >= 3
       end
 
       it 'yields to the block multiple times' do
-        expect { |probe| dummy_class.wait_until(timeout: 1, &probe) }.to yield_control.at_least(:twice).and raise_error(TimeoutError)
+        expect { |probe| dummy_class.wait_until(timeout: 1, &probe) }.to yield_control.at_least(:twice).and raise_error(Timeout::Error)
       end
 
       it 'should sleep for interval duration' do
@@ -137,7 +137,7 @@ describe TestHelpers::Wait do
         it 'should eventually raise the given error' do
           error_message = 'blah'
           statement = -> { dummy_class.wait_until(error_message: error_message) { true == false } }
-          expect { statement.call }.to raise_error(TimeoutError, error_message)
+          expect { statement.call }.to raise_error(Timeout::Error, error_message)
         end
       end
     end
