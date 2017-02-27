@@ -49,7 +49,7 @@ module TestHelpers
       until ::Time.now > end_time
         begin
           result = yield
-          if result.status
+          if result
             return result
           else
             sleep interval
