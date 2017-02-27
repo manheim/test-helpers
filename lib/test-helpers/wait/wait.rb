@@ -49,7 +49,6 @@ module TestHelpers
       until ::Time.now > end_time
         begin
           result = yield
-          result = yield
           return result if result
           sleep interval
         rescue ::StandardError
