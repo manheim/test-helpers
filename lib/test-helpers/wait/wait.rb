@@ -49,7 +49,11 @@ module TestHelpers
       until ::Time.now > end_time
         begin
           result = yield
-          return result if result
+          if result.status
+            return result
+          else
+            sleep interval
+          end
         rescue ::StandardError
           sleep interval
         end
