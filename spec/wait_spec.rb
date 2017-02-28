@@ -3,14 +3,42 @@ require 'test-helpers/wait'
 
 describe TestHelpers::Wait do
 
-  before :all do
-    TestHelpers::Wait.configuration do |config|
-      config.wait_timeout = 30
-      config.wait_interval = 2
+  describe TestHelpers::Wait::Configuration do
+    describe '.wait_timeout' do
+      it 'should return the default wait timeout' do
+        expect(TestHelpers::Wait.default_configuration.wait_timeout).to eql 5.0
+      end
+    end
+
+    describe '.wait_interval' do
+      it 'should return the default wait interval' do
+        expect(TestHelpers::Wait.default_configuration.wait_interval).to eql 0.1
+      end
+    end
+
+    describe '.error_message' do
+      it 'should return the default error message' do
+        expect(TestHelpers::Wait.default_configuration.error_message).to eql 'Timed out waiting for block'
+      end
+    end
+
+    describe '.configuration' do
+      it 'should redirect to .default_configuration' do
+        allow(TestHelpers::Wait).to receive(:default_configuration)
+        TestHelpers::Wait.configuration
+        expect(TestHelpers::Wait).to have_received(:default_configuration)
+      end
     end
   end
 
   describe '.poll_and_assert' do
+
+    before :all do
+      TestHelpers::Wait.configure do |config|
+        config.wait_timeout = 1
+        config.wait_interval = 0.5
+      end
+    end
 
     let(:dummy_class) { Class.new { extend TestHelpers::Wait } }
 
@@ -51,8 +79,8 @@ describe TestHelpers::Wait do
         rescue Exception
           end_time = Time.now
         end
-        expect(end_time - start_time).to be >= TestHelpers::Wait.configuration.wait_timeout
-        expect(end_time - start_time).to be < TestHelpers::Wait.configuration.wait_timeout + 1
+        expect(end_time - start_time).to be >= TestHelpers::Wait.default_configuration.wait_timeout
+        expect(end_time - start_time).to be < TestHelpers::Wait.default_configuration.wait_timeout + 1
       end
 
       it 'should not raise an error until the specified timeout has elapsed' do
@@ -66,7 +94,7 @@ describe TestHelpers::Wait do
       end
 
       it 'should sleep for interval duration' do
-        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers::Wait.configuration.wait_interval)
+        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers::Wait.default_configuration.wait_interval)
         allow(dummy_class).to receive(:raise).and_return(false)
         dummy_class.poll_and_assert { expect(true).to be false }
       end
@@ -108,17 +136,12 @@ describe TestHelpers::Wait do
         expect { statement.call }.to raise_error(Timeout::Error)
       end
 
-      it 'should blah' do
-        statement = -> { dummy_class.wait_until { puts 'Hello, world!'; raise } }
-        expect(statement.call).to raise_error(Timeout::Error)
-      end
-
       it 'should not raise an error until the default timeout has elapsed' do
         start_time = Time.now
         expect { dummy_class.wait_until { true == false } }.to raise_error(Timeout::Error)
         end_time = Time.now
-        expect(end_time - start_time).to be >= TestHelpers::Wait.configuration.wait_timeout
-        expect(end_time - start_time).to be < TestHelpers::Wait.configuration.wait_timeout + 1
+        expect(end_time - start_time).to be >= TestHelpers::Wait.default_configuration.wait_timeout
+        expect(end_time - start_time).to be < TestHelpers::Wait.default_configuration.wait_timeout + 1
       end
 
       it 'should not raise an error until the specified timeout has elapsed' do
@@ -133,7 +156,7 @@ describe TestHelpers::Wait do
       end
 
       it 'should sleep for interval duration' do
-        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers::Wait.configuration.wait_interval)
+        expect(dummy_class).to receive(:sleep).at_least(1).times.with(TestHelpers::Wait.default_configuration.wait_interval)
         allow(dummy_class).to receive(:raise).and_return(false)
         dummy_class.poll_and_assert { expect(true).to be false }
       end
