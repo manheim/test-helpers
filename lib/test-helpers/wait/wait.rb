@@ -50,6 +50,7 @@ module TestHelpers
         begin
           result = yield
           return result if result
+          sleep interval
         rescue ::StandardError
           sleep interval
         end
