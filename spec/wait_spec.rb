@@ -5,8 +5,8 @@ describe TestHelpers::Wait do
 
   before :all do
     TestHelpers::Wait.configuration do |config|
-      config.wait_timeout = 1
-      config.wait_interval = 0.5
+      config.wait_timeout = 30
+      config.wait_interval = 2
     end
   end
 
@@ -106,6 +106,11 @@ describe TestHelpers::Wait do
       it 'should eventually raise an error' do
         statement = -> { dummy_class.wait_until { true == false } }
         expect { statement.call }.to raise_error(Timeout::Error)
+      end
+
+      it 'should blah' do
+        statement = -> { dummy_class.wait_until { puts 'Hello, world!'; raise } }
+        expect(statement.call).to raise_error(Timeout::Error)
       end
 
       it 'should not raise an error until the default timeout has elapsed' do
