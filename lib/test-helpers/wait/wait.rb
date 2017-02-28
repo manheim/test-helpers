@@ -5,6 +5,10 @@ module TestHelpers
     end
 
     def self.configuration
+      if block_given?
+        warn "'configuration' will be deprecated in the next version. Please use 'configure' instead to set defaults."
+        yield(configuration)
+      end
       @configuration ||= Configuration.new
     end
 
