@@ -1,15 +1,20 @@
 module TestHelpers
   module Wait
-    class << self
-      attr_accessor :configuration
+    def self.configuration
+      default_configuration
     end
 
-    def self.configuration
+    def self.default_configuration
       @configuration ||= Configuration.new
     end
 
     def self.configure
-      yield(configuration) if block_given?
+      yield(default_configuration) if block_given?
+    end
+
+    class << self
+      extend ::Gem::Deprecate
+      deprecate :configuration, :default_configuration, 2017, 04
     end
 
     class Configuration
@@ -24,8 +29,8 @@ module TestHelpers
 
     def poll_and_assert(options = {})
       return unless block_given?
-      timeout = Float(options[:timeout] || TestHelpers::Wait.configuration.wait_timeout)
-      interval = Float(options[:interval] || TestHelpers::Wait.configuration.wait_interval)
+      timeout = Float(options[:timeout] || TestHelpers::Wait.default_configuration.wait_timeout)
+      interval = Float(options[:interval] || TestHelpers::Wait.default_configuration.wait_interval)
       end_time = ::Time.now + timeout
       failure = nil
       until ::Time.now > end_time
@@ -42,9 +47,9 @@ module TestHelpers
 
     def wait_until(options = {})
       return unless block_given?
-      timeout = Float(options[:timeout] || TestHelpers::Wait.configuration.wait_timeout)
-      interval = Float(options[:interval] || TestHelpers::Wait.configuration.wait_interval)
-      error_message = options[:error_message] || TestHelpers::Wait.configuration.error_message
+      timeout = Float(options[:timeout] || TestHelpers::Wait.default_configuration.wait_timeout)
+      interval = Float(options[:interval] || TestHelpers::Wait.default_configuration.wait_interval)
+      error_message = options[:error_message] || TestHelpers::Wait.default_configuration.error_message
       end_time = ::Time.now + timeout
       until ::Time.now > end_time
         begin

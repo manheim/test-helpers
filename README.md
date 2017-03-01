@@ -64,7 +64,7 @@ There are multiple default configuration options that you can set.
 # features\support\env.rb
 # or
 # spec_helper.rb
-TestHelpers::Wait.configuration do |config|
+TestHelpers::Wait.configure do |config|
   config.wait_timeout = 30 #timeout after 30 seconds
   config.wait_interval = 0.5 #poll the given block every 0.5 seconds
   config.error_message = 'My default error message'
@@ -73,7 +73,7 @@ end
 
 If you don't set your own defaults the following defaults will apply:
 ```ruby
-TestHelpers::Wait.configuration do |config|
+TestHelpers::Wait.configure do |config|
   config.wait_timeout = 5.0
   config.wait_interval = 0.1
   config.error_message = 'Timed out waiting for block'
