@@ -3,22 +3,46 @@ require 'test-helpers/wait'
 
 describe TestHelpers::Wait do
 
-  describe TestHelpers::Wait::Configuration do
+  describe TestHelpers::Wait do
+
+    let(:default_configuration) { TestHelpers::Wait.default_configuration }
+
+    describe '.default_configuration' do
+      it 'should be a Test::Helpers::Configuration object' do
+        expect(default_configuration).to be_a_kind_of TestHelpers::Wait::Configuration
+      end
+    end
+
     describe '.wait_timeout' do
       it 'should return the default wait timeout' do
-        expect(TestHelpers::Wait.default_configuration.wait_timeout).to eql 5.0
+        expect(default_configuration.wait_timeout).to eql 5.0
+      end
+
+      it 'should update default wait timeout with the given value' do
+        default_configuration.wait_timeout = 30
+        expect(default_configuration.wait_timeout).to eql 30
       end
     end
 
     describe '.wait_interval' do
       it 'should return the default wait interval' do
-        expect(TestHelpers::Wait.default_configuration.wait_interval).to eql 0.1
+        expect(default_configuration.wait_interval).to eql 0.1
+      end
+
+      it 'should update default wait interval with the given value' do
+        default_configuration.wait_interval = 2
+        expect(default_configuration.wait_interval).to eql 2
       end
     end
 
     describe '.error_message' do
       it 'should return the default error message' do
-        expect(TestHelpers::Wait.default_configuration.error_message).to eql 'Timed out waiting for block'
+        expect(default_configuration.error_message).to eql 'Timed out waiting for block'
+      end
+
+      it 'should update the default error message to the given string' do
+        default_configuration.error_message = 'A new error message'
+        expect(default_configuration.error_message).to eql 'A new error message'
       end
     end
 
@@ -29,6 +53,7 @@ describe TestHelpers::Wait do
         expect(TestHelpers::Wait).to have_received(:default_configuration)
       end
     end
+
   end
 
   describe '.poll_and_assert' do
