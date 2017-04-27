@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.3.0'
   s.name = 'test-helpers'
   s.version = TestHelpers::VERSION
-  s.date = '2015-08-25'
+  s.date = Date.today.strftime('%Y-%m-%d')
   s.summary = "Test helpers!"
   s.description = "A collection of helpers."
   s.authors = ["Umair Chagani, Manheim"]
