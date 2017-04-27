@@ -2,6 +2,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'test-helpers/version.rb'
+require 'date'
 
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.3.0'
